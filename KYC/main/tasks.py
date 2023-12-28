@@ -1,6 +1,9 @@
-# main/tasks.py
 from celery import shared_task
-from main.utils import approve_documents, reject_documents, send_new_document_notification
+from main.utils import (
+    approve_documents,
+    reject_documents,
+    send_new_document_notification,
+)
 from main.models import Document
 
 

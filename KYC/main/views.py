@@ -1,11 +1,14 @@
-# main/views.py
 from rest_framework import generics, permissions
 from main.models import Document
-from .utils import send_approval_notification, send_rejection_notification, send_new_document_notification
+from .utils import (
+    send_approval_notification,
+    send_rejection_notification,
+    send_new_document_notification,
+)
 from main.serializers import (
     DocumentSerializer,
     DocumentListSerializer,
-    DocumentAllSerializer
+    DocumentAllSerializer,
 )
 
 
@@ -23,6 +26,7 @@ class DocumentCreateAPIView(generics.CreateAPIView):
     API-представление для создания (загрузки) документа.
     Пользователь должен быть аутентифицирован для использования этого API.
     """
+
     serializer_class = DocumentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -44,6 +48,7 @@ class DocumentListAPIView(generics.ListAPIView):
     API-представление для просмотра списка загруженных документов.
     Пользователь должен быть аутентифицирован для использования этого API.
     """
+
     serializer_class = DocumentListSerializer
     permission_classes = [permissions.IsAuthenticated]
 
@@ -51,9 +56,13 @@ class DocumentListAPIView(generics.ListAPIView):
         """Возвращает только документы, загруженные текущим пользователем или все для администратора."""
         user = self.request.user
         if user.is_staff:  # Проверяем, является ли пользователь администратором
-            return Document.objects.all()  # Если администратор, то возвращаем все документы
+            return (
+                Document.objects.all()
+            )  # Если администратор, то возвращаем все документы
         else:
-            return Document.objects.filter(user=user)  # Возвращаем документы пользователя
+            return Document.objects.filter(
+                user=user
+            )  # Возвращаем документы пользователя
 
 
 class DocumentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
@@ -61,6 +70,7 @@ class DocumentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView
     API-представление для просмотра, изменения и удаления данных о документе.
     Пользователь должен быть аутентифицирован для использования этого API.
     """
+
     serializer_class = DocumentAllSerializer
     queryset = Document.objects.all()
     permission_classes = [IsOwnerOrAdmin]
@@ -76,9 +86,13 @@ class DocumentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView
         if document.is_approved:
             document.is_rejected = False
             document.save()
-            send_approval_notification.apply_async(args=[document.id], serializer='json', encoder='DjangoJSONEncoder')
+            send_approval_notification.apply_async(
+                args=[document.id], serializer="json", encoder="DjangoJSONEncoder"
+            )
         # Сбросим флаг is_approved, если документ отклонен
         elif document.is_rejected:
             document.is_approved = False
             document.save()
-            send_rejection_notification.apply_async(args=[document.id], serializer='json', encoder='DjangoJSONEncoder')
+            send_rejection_notification.apply_async(
+                args=[document.id], serializer="json", encoder="DjangoJSONEncoder"
+            )

@@ -1,4 +1,3 @@
-# main/utils.py
 from celery import shared_task
 from django.core.mail import send_mail
 from KYC.settings import EMAIL_HOST_USER
@@ -31,10 +30,10 @@ def reject_documents(document_ids):
 def send_approval_notification(document_id):
     document = Document.objects.get(id=document_id)
     send_mail(
-        subject='Документ подтвержден',
-        message=f'Ваш документ был подтвержден администратором.',
+        subject="Документ подтвержден",
+        message=f"Ваш документ был подтвержден администратором.",
         from_email=EMAIL_HOST_USER,
-        recipient_list=[document.user.email]
+        recipient_list=[document.user.email],
     )
 
 
@@ -43,10 +42,10 @@ def send_approval_notification(document_id):
 def send_rejection_notification(document_id):
     document = Document.objects.get(id=document_id)
     send_mail(
-        subject='Документ отклонен',
-        message=f'Ваш документ был отклонен администратором. Пожалуйста, проверьте и отправьте заново.',
+        subject="Документ отклонен",
+        message=f"Ваш документ был отклонен администратором. Пожалуйста, проверьте и отправьте заново.",
         from_email=EMAIL_HOST_USER,
-        recipient_list=[document.user.email]
+        recipient_list=[document.user.email],
     )
 
 
@@ -60,9 +59,9 @@ def send_new_document_notification(document_id):
     admin_email = admin_users.first().email
 
     send_mail(
-        subject='Новый документ',
+        subject="Новый документ",
         message=f'Новый документ "{document.file.name}" был загружен {document.uploaded_at} '
-                f'пользователем {document.user.email}. Подтвердите его в админке.',
+        f"пользователем {document.user.email}. Подтвердите его в админке.",
         from_email=EMAIL_HOST_USER,
-        recipient_list=[admin_email]
+        recipient_list=[admin_email],
     )

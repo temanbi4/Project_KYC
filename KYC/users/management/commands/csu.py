@@ -4,20 +4,20 @@ from users.models import User
 
 
 class Command(BaseCommand):
-    """Комманда для создания супер юзера python manage.py csu """
+    """Комманда для создания супер юзера python manage.py csu"""
 
     def handle(self, *args, **options):
         """Создаем админа"""
         try:
             user = User.objects.create(
-                email='colombodoro@ya.ru',
+                email="colombodoro@ya.ru",
                 is_staff=True,
                 is_superuser=True,
             )
 
-            user.set_password('admin')
+            user.set_password("admin")
             user.save()
-            print('SuperUser created')
+            print("SuperUser created")
 
         except IntegrityError as e:
-            print('Такой пользователь уже существует')
+            print("Такой пользователь уже существует")
