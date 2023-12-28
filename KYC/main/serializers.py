@@ -20,6 +20,13 @@ class DocumentListSerializer(serializers.ModelSerializer):
         model = Document
         fields = ['id', 'user', 'file', 'is_approved', 'is_rejected', 'uploaded_at']
 
+    def update_document_status(self, instance, is_approved, is_rejected):
+        """Метод для обновления статуса документа"""
+        instance.is_approved = is_approved
+        instance.is_rejected = is_rejected
+        instance.save()
+        return instance
+
 
 class DocumentCheckSerializer(serializers.ModelSerializer):
     """Сериализатор для админов на принятие или отклонение документа"""
@@ -27,7 +34,7 @@ class DocumentCheckSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Document
-        fields = ['is_approved', 'is_rejected', 'user']
+        fields = ['id', 'is_approved', 'is_rejected', 'user']
 
 
 class DocumentIdSerializer(serializers.ModelSerializer):
