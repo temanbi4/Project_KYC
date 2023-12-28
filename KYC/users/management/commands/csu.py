@@ -10,7 +10,7 @@ class Command(BaseCommand):
         """Создаем админа"""
         try:
             user = User.objects.create(
-                email='admin@admin.admin',
+                email='colombodoro@ya.ru',
                 is_staff=True,
                 is_superuser=True,
             )

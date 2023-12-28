@@ -11,7 +11,8 @@ from main.serializers import (
     DocumentAllSerializer
 )
 from users.models import User
-from .utils import send_approval_notification, send_rejection_notification
+from .utils import send_approval_notification, send_rejection_notification, send_new_document_notification
+from django.core.serializers.json import DjangoJSONEncoder
 
 
 class IsOwnerOrAdmin(permissions.BasePermission):
@@ -38,16 +39,8 @@ class DocumentCreateAPIView(generics.CreateAPIView):
         Отправляется уведомление администратору о новом документе.
         """
         document = serializer.save(user=self.request.user)
-        admin_users = User.objects.filter(is_staff=True)
-        admin_email = admin_users.first().email
 
-        send_mail(
-            subject='Новый документ',
-            message=f'Новый документ был загружен {self.request.user.uploaded_at} '
-                    f'пользователем {self.request.user.email}. Подтвердите его в админке.',
-            from_email=EMAIL_HOST_USER,
-            recipient_list=[admin_email]
-        )
+        send_new_document_notification.apply_async(args=[document.id])
 
         return document
 
@@ -85,9 +78,9 @@ class DocumentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView
         if document.is_approved:
             document.is_rejected = False
             document.save()
-            send_approval_notification([document])
+            send_approval_notification.apply_async(args=[document], serializer='json', encoder='DjangoJSONEncoder')
         # Сбросим флаг is_approved, если документ отклонен
         elif document.is_rejected:
             document.is_approved = False
             document.save()
-            send_rejection_notification([document])
+            send_rejection_notification.apply_async(args=[document], serializer='json', encoder='DjangoJSONEncoder')

@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'users',
     'main',
+    'celery',
 
 ]
 
@@ -171,6 +172,13 @@ LOGIN_REDIRECT_URL = '/'
 CORS_ALLOWED_ORIGINS = ['http://localhost:8000', ]
 CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', ]
 
-# Celery Configuration
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+# Настройки для Celery
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # URL для подключения к Redis в качестве брокера
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # URL для подключения к Redis в качестве бекенда для результатов
+
+# Включить использование Celery в приложении Django
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_DISABLE_RATE_LIMITS = True
