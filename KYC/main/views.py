@@ -1,18 +1,12 @@
 # main/views.py
-from django.core.mail import send_mail
 from rest_framework import generics, permissions
-from KYC.settings import EMAIL_HOST_USER
 from main.models import Document
+from .utils import send_approval_notification, send_rejection_notification, send_new_document_notification
 from main.serializers import (
     DocumentSerializer,
     DocumentListSerializer,
-    DocumentCheckSerializer,
-    DocumentIdSerializer,
     DocumentAllSerializer
 )
-from users.models import User
-from .utils import send_approval_notification, send_rejection_notification, send_new_document_notification
-from django.core.serializers.json import DjangoJSONEncoder
 
 
 class IsOwnerOrAdmin(permissions.BasePermission):

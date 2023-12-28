@@ -37,6 +37,7 @@ def send_approval_notification(document_id):
         recipient_list=[document.user.email]
     )
 
+
 # Отправляет уведомление пользователю после отклонения документа.
 @shared_task
 def send_rejection_notification(document_id):
@@ -55,11 +56,12 @@ def send_new_document_notification(document_id):
     Отправляет уведомление администратору о новом документе.
     """
     document = Document.objects.get(id=document_id)
-    admin_email = 'colombodoro@ya.ru'
+    admin_users = User.objects.filter(is_staff=True)
+    admin_email = admin_users.first().email
 
     send_mail(
         subject='Новый документ',
-        message=f'Новый документ был загружен {document.user.uploaded_at} '
+        message=f'Новый документ "{document.file.name}" был загружен {document.uploaded_at} '
                 f'пользователем {document.user.email}. Подтвердите его в админке.',
         from_email=EMAIL_HOST_USER,
         recipient_list=[admin_email]
