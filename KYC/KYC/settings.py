@@ -92,7 +92,7 @@ DATABASES = {
         'NAME': os.getenv('DB_NAME'),
         'USER': os.getenv('DB_USER'),
         'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST')
+#        'HOST': os.getenv('DB_HOST')
     }
 }
 
@@ -155,16 +155,14 @@ REST_FRAMEWORK = {
     ]
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.locmem.EmailBackend'
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_HOST = os.getenv('EMAIL_HOST')
 EMAIL_PORT = os.getenv('EMAIL_PORT')
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
-EMAIL_USE_TLS = False
-EMAIL_USE_SSL = True
+EMAIL_USE_TLS = True
+EMAIL_USE_SSL = False
 
 AUTH_USER_MODEL = 'users.user'
 
@@ -178,6 +176,7 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', ]
 # Настройки для Celery
 CELERY_BROKER_URL = 'redis://localhost:6379/0'  # URL для подключения к Redis в качестве брокера
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # URL для подключения к Redis в качестве бекенда для результатов
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 # Включить использование Celery в приложении Django
 CELERY_ACCEPT_CONTENT = ['json']

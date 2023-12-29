@@ -7,6 +7,8 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
 from django.core import mail
 from main.utils import send_new_document_notification
+
+
 class DocumentTest(TestCase):
     def setUp(self):
         # Добавляем Юзера
