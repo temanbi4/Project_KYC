@@ -37,14 +37,5 @@ services:
       - db
       - redis
 
-  celery_beat:
-    build: .
-    tty: True
-    command: celery -A KYC beat -l info -S django
-    depends_on:
-      - celery
-      - redis
-      - db
-
 volumes:
   pg_data:
