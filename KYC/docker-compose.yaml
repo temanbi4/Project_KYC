@@ -33,12 +33,18 @@ services:
     build: .
     tty: True
     command: celery -A config worker -l info
+    depends_on:
+      - db
+      - redis
+
   celery_beat:
     build: .
     tty: True
     command: celery -A config beat -l info -S django
     depends_on:
+      - celery
       - redis
-      - app
+      - db
+
 volumes:
   pg_data:
