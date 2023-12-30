@@ -174,8 +174,8 @@ CSRF_TRUSTED_ORIGINS = ['http://localhost:8000', ]
 
 
 # Настройки для Celery
-CELERY_BROKER_URL = 'redis://localhost:6379/0'  # URL для подключения к Redis в качестве брокера
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # URL для подключения к Redis в качестве бекенда для результатов
+CELERY_BROKER_URL = 'redis://redis:6379/0'  # URL для подключения к Redis в качестве брокера
+CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # URL для подключения к Redis в качестве бекенда для результатов
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 # Включить использование Celery в приложении Django
