@@ -2,10 +2,13 @@ version: '3'
 
 services:
   redis:
+    container_name: kyc_redis_1
     image: redis
     ports:
-      - '6380:6379'
+      - '6381:6379'
+
   db:
+    container_name: kyc_db_1
     image: postgres
     env_file:
       - .env
@@ -18,21 +21,22 @@ services:
     volumes:
       - pg_data:/var/lib/postgresql/data/pgdata
     ports:
-      - '5433:5432'
+      - '5435:5432'
 
   app:
+    container_name: kyc_app_1
     build: .
     tty: True
     command: bash -c "python manage.py migrate && python manage.py csu --email="colombodoro@ya.ru" --password="admin" && python manage.py runserver 0.0.0.0:8000"
     ports:
-      - '8000:8000'
+      - '8080:8000'
     volumes:
       - .:/workdir_KYC
 
   celery:
+    container_name: kyc_celery_1
     build: .
-    tty: True
-    command: celery -A KYC worker -l info
+    command: celery -A workdir_KYC worker -l info
     depends_on:
       - db
       - redis
