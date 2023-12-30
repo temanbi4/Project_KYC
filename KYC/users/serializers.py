@@ -5,14 +5,15 @@ from .models import User
 
 class UserSerializer(serializers.ModelSerializer):
     """Сериализатор для создания юзера"""
+
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = User
-        fields = ['email', 'telegram_id', 'password']
+        fields = ["email", "telegram_id", "password"]
 
     def create(self, validated_data):
-        password = validated_data.pop('password', None)
+        password = validated_data.pop("password", None)
         instance = self.Meta.model(**validated_data)
 
         if password:
@@ -25,6 +26,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class UserDocSerializer(serializers.ModelSerializer):
     """Сериализатор для отображения юзера"""
+
     class Meta:
         model = User
-        fields = ['email', 'telegram_id']
+        fields = ["email", "telegram_id"]
