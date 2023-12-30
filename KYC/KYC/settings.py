@@ -178,7 +178,6 @@ CELERY_BROKER_URL = 'redis://redis:6379/0'  # URL для подключения 
 CELERY_RESULT_BACKEND = 'redis://redis:6379/0'  # URL для подключения к Redis в качестве бекенда для результатов
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
-# Включить использование Celery в приложении Django
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'

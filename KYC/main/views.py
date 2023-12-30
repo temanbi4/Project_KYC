@@ -53,7 +53,9 @@ class DocumentListAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        """Возвращает только документы, загруженные текущим пользователем или все для администратора."""
+        """Возвращает только документы, загруженные текущим пользователем.
+           Администратору возращает все загруженные документы.
+        """
         user = self.request.user
         if user.is_staff:  # Проверяем, является ли пользователь администратором
             return (
@@ -82,14 +84,14 @@ class DocumentRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView
         """
         document = serializer.save()
 
-        # Сбросим флаг is_rejected, если документ подтвержден
+        # Сброс флага is_rejected, если документ подтвержден
         if document.is_approved:
             document.is_rejected = False
             document.save()
             send_approval_notification.apply_async(
                 args=[document.id], serializer="json", encoder="DjangoJSONEncoder"
             )
-        # Сбросим флаг is_approved, если документ отклонен
+        # Сброс флаг is_approved, если документ отклонен
         elif document.is_rejected:
             document.is_approved = False
             document.save()

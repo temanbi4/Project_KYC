@@ -5,9 +5,11 @@ from main.models import Document
 from users.models import User
 
 
-# Быстрое действие для подтверждения документов.
 @shared_task
 def approve_documents(document_ids):
+    """
+    Быстрое действие для подтверждения документов.
+    """
     documents = Document.objects.filter(id__in=document_ids)
     for document in documents:
         document.is_approved = True
@@ -15,9 +17,12 @@ def approve_documents(document_ids):
         send_approval_notification.apply_async(args=[document.id])
 
 
-# Быстрое действие для отклонения документов.
+
 @shared_task
 def reject_documents(document_ids):
+    """
+    Быстрое действие для отклонения документов.
+    """
     documents = Document.objects.filter(id__in=document_ids)
     for document in documents:
         document.is_rejected = True
@@ -25,9 +30,11 @@ def reject_documents(document_ids):
         send_rejection_notification.apply_async(args=[document.id])
 
 
-# Отправляет уведомление пользователю после подтверждения документа.
 @shared_task
 def send_approval_notification(document_id):
+    """
+    Отправляет уведомление пользователю после подтверждения документа.
+    """
     document = Document.objects.get(id=document_id)
     send_mail(
         subject="Документ подтвержден",
@@ -37,9 +44,11 @@ def send_approval_notification(document_id):
     )
 
 
-# Отправляет уведомление пользователю после отклонения документа.
 @shared_task
 def send_rejection_notification(document_id):
+    """
+    Отправляет уведомление пользователю после отклонения документа.
+    """
     document = Document.objects.get(id=document_id)
     send_mail(
         subject="Документ отклонен",

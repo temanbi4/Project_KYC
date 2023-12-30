@@ -9,8 +9,8 @@ class Command(BaseCommand):
     python manage.py csu --email="Ваша почта администратора" --password="Ваш пароль администратора"
     """
 
-
     def add_arguments(self, parser):
+        """Использование аргументов для кастомных данных авторизации администратора"""
         parser.add_argument('--email', type=str, help='Email address for the superuser')
         parser.add_argument('--password', type=str, help='Password for the superuser')
 

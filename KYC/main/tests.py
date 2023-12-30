@@ -5,7 +5,6 @@ from rest_framework.test import APIClient
 from main.models import Document
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.urls import reverse
-from django.core import mail
 from main.utils import send_new_document_notification
 
 
@@ -53,11 +52,6 @@ class DocumentTest(TestCase):
 
         # Посылаем уведомление асинхронно, используя document_info вместо document.id
         send_new_document_notification.apply_async(args=[document_id])
-
-        # Проверка отправки уведомления администратору
-        # self.assertEqual(len(mail.outbox), 1)
-        # self.assertEqual(mail.outbox[0].subject, 'Новый документ')
-        # self.assertEqual(mail.outbox[0].to, [self.admin_user.email])
 
         # Проверка, что атрибут user объекта совпадает с текущим пользователем
         self.assertEqual(document.user, self.user)

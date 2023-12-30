@@ -27,7 +27,7 @@ services:
     container_name: kyc_app_1
     build: .
     tty: True
-    command: bash -c "python manage.py migrate && python manage.py csu --email="colombodoro@ya.ru" --password="admin" && python manage.py runserver 0.0.0.0:8000"
+    command: bash -c "python manage.py migrate && python manage.py csu --email="admin@admin.admin" --password="admin" && python manage.py runserver 0.0.0.0:8000"
     ports:
       - '8080:8000'
     volumes:

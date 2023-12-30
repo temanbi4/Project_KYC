@@ -8,7 +8,6 @@ class User(AbstractUser):
     """Модель пользователя"""
 
     username = None
-
     email = models.EmailField(unique=True, verbose_name="Email")
     telegram_id = models.CharField(
         max_length=100, verbose_name="Телеграм ID пользователя", **NULLABLE
